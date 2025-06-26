@@ -1,4 +1,3 @@
-{% load form_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,11 +16,11 @@
             {% csrf_token %}
             <div class="mb-3">
                 <label for="id_username" class="form-label">Username</label>
-                {{ form.username|add_class:"form-control" }}
+                {{ form.username }}
             </div>
             <div class="mb-3">
                 <label for="id_password" class="form-label">Password</label>
-                {{ form.password|add_class:"form-control" }}
+                {{ form.password }}
             </div>
             <button type="submit" class="btn btn-primary w-100">Log In</button>
         </form>
