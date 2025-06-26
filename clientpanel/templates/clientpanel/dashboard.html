@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">Clients</h1>
+    <a href="{% url 'client_add' %}" class="btn btn-success">+ Add Client</a>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Business</th>
+          <th>Created</th>
+          <th>Services</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for client in clients %}
+        <tr>
+          <td>{{ client.name }}</td>
+          <td>{{ client.email }}</td>
+          <td>{{ client.business_name }}</td>
+          <td>{{ client.created_at|date:"Y-m-d" }}</td>
+          <td>
+            {% for service in client.services.all %}
+              <span class="badge bg-info text-dark">{{ service.name }}</span>
+            {% empty %}
+              <span class="text-muted">None</span>
+            {% endfor %}
+          </td>
+          <td>
+            <a href="{% url 'client_detail' client.id %}" class="btn btn-sm btn-info">Details</a>
+            <a href="{% url 'client_edit' client.id %}" class="btn btn-sm btn-warning">Edit</a>
+            <a href="{% url 'manage_services' client.id %}" class="btn btn-sm btn-secondary">Services</a>
+            <form method="post" action="{% url 'client_delete' client.id %}" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?');">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const ctx = document.getElementById('clientsChart').getContext('2d');
+  const clientsChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{ months|safe }},
+      datasets: [{
+        label: 'New Clients',
+        data: {{ client_counts|safe }},
+        backgroundColor: '#0d6efd'
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1
+          }
+        }
+      }
+    }
+  });
+</script>
+{% endblock %}

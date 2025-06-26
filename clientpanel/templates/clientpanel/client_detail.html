@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container mt-4">
+    <div class="card shadow p-4">
+      <h2 class="mb-4">{{ client.name }}</h2>
+
+      <dl class="row fs-5">
+        <dt class="col-sm-3">Email</dt>
+        <dd class="col-sm-9">{{ client.email }}</dd>
+
+        <dt class="col-sm-3">Phone</dt>
+        <dd class="col-sm-9">{{ client.phone }}</dd>
+
+        <dt class="col-sm-3">Business</dt>
+        <dd class="col-sm-9">{{ client.business_name }}</dd>
+
+        <dt class="col-sm-3">Created At</dt>
+        <dd class="col-sm-9">{{ client.created_at|date:"F j, Y" }}</dd>
+      </dl>
+
+      <h4 class="mt-4">Services for {{ client.name }}</h4>
+
+      {% if client.services.all %}
+        <ul class="list-group mt-2 mb-3">
+          {% for service in client.services.all %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              {{ service.name }}
+              <span>${{ service.price }}</span>
+            </li>
+          {% endfor %}
+          <li class="list-group-item d-flex justify-content-between align-items-center fw-bold">
+              Total
+              <span>${{ total_service_cost|floatformat:2 }}</span>
+          </li>
+        </ul>
+      {% else %}
+        <p class="text-muted">No services assigned yet.</p>
+      {% endif %}
+
+      <a href="{% url 'manage_services' client.id %}" class="btn btn-outline-primary">Manage Services</a>
+      <a href="{% url 'client_edit' client.id %}" class="btn btn-warning me-2">Edit</a>
+      <a href="{% url 'download_invoice' client.id %}" class="btn btn-outline-secondary mt-3">Download Invoice (PDF)</a>
+      <a href="{% url 'dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+  </div>
+{% endblock %}

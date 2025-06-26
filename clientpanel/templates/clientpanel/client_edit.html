@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load form_filters %}
+
+{% block content %}
+  <div class="container mt-4">
+    <div class="card shadow p-4">
+      <h2 class="mb-4">Edit Client: {{ form.instance.name }}</h2>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+          <label for="id_name" class="form-label">Name</label>
+          {{ form.name|add_class:"form-control" }}
+        </div>
+
+        <div class="mb-3">
+          <label for="id_email" class="form-label">Email</label>
+          {{ form.email|add_class:"form-control" }}
+        </div>
+
+        <div class="mb-3">
+          <label for="id_phone" class="form-label">Phone</label>
+          {{ form.phone|add_class:"form-control" }}
+        </div>
+
+        <div class="mb-3">
+          <label for="id_business_name" class="form-label">Business Name</label>
+          {{ form.business_name|add_class:"form-control" }}
+        </div>
+
+        <button type="submit" class="btn btn-success me-2">Save Changes</button>
+
+          {% if form.instance.id %}
+            <a href="{% url 'client_detail' form.instance.id %}" class="btn btn-secondary">Cancel</a>
+          {% else %}
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancel</a>
+          {% endif %}
+      </form>
+    </div>
+  </div>
+{% endblock %}
